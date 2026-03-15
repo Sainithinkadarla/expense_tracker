@@ -65,3 +65,7 @@ async def get_exp_between_dates_with_category(start_date: str, end_date: str, ca
     end = datetime.strptime(end_date, "%Y-%m-%d")
     async with create_async_session() as session:
         query = select(Expense).where(and_(Expense.date.between(start, end), Expense.category == category))
+
+
+if __name__ == "_main__":
+    app.run()
