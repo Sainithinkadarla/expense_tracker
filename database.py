@@ -3,8 +3,10 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_asyn
 from contextlib import asynccontextmanager
 
 from models import Base
+import os 
 
-DB_URL = "sqlite+aiosqlite:///expenses.db"
+# DB_PATH = os.path.join(os.path.dirname(__file__), "expenses.db")
+DB_URL = f"sqlite+aiosqlite:////tmp/expenses.db"
 engine = create_async_engine(DB_URL)
 
 session_maker = async_sessionmaker(engine, expire_on_commit=False)
