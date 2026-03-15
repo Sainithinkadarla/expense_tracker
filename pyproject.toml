@@ -1,0 +1,11 @@
+[project]
+name = "agents"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.13"
+dependencies = [
+    "aiosqlite>=0.22.1",
+    "fastmcp>=3.1.0",
+    "sqlalchemy[asyncio]>=2.0.48",
+]
