@@ -13,14 +13,14 @@ from models import Expense
 from utils import list_of_objects_parser
 
 @asynccontextmanager
-async def lifespan(mcp: FastMCP):
+async def lifespan(app: FastMCP):
     await create_all_tables()
     yield
 
-mcp = FastMCP(lifespan=lifespan, name="Expense Tracker MCP")
-# mcp = FastMCP(name="Expense Tracker MCP")
+app = FastMCP(lifespan=lifespan, name="Expense Tracker MCP")
+# app = FastMCP(name="Expense Tracker MCP")
 
-@mcp.tool
+@app.tool
 async def create_expense(expense_create: ExpenseCreate):
     """Creating a expense"""
     async with create_async_session() as session:
@@ -31,7 +31,7 @@ async def create_expense(expense_create: ExpenseCreate):
         # return ExpenseRead(**expense.__dict__)
         return ExpenseRead.model_validate(expense).model_dump_json()
     
-@mcp.tool
+@app.tool
 async def get_expenses_by_cat(category: str):
     """Get all expenses of that category"""
     async with create_async_session() as session:
@@ -40,7 +40,7 @@ async def get_expenses_by_cat(category: str):
         return await list_of_objects_parser(result=result)
 
 
-@mcp.tool
+@app.tool
 async def get_expenses():
     """Get all expenses"""
     async with create_async_session() as session:
@@ -48,7 +48,7 @@ async def get_expenses():
         result = await session.execute(query)
         return await list_of_objects_parser(result=result)
     
-@mcp.tool
+@app.tool
 async def get_between_dates(start_date: str, end_date: str):
     """Get expenses from between dates"""
     start = datetime.strptime(start_date, "%Y-%m-%d")
@@ -58,7 +58,7 @@ async def get_between_dates(start_date: str, end_date: str):
         result = await session.execute(query)
         return await list_of_objects_parser(result=result)
     
-@mcp.tool
+@app.tool
 async def get_exp_between_dates_with_category(start_date: str, end_date: str, category: str):
     "Get expenses from between dates of a category"
     start = datetime.strptime(start_date, "%Y-%m-%d")
@@ -68,4 +68,4 @@ async def get_exp_between_dates_with_category(start_date: str, end_date: str, ca
 
 
 if __name__ == "_main__":
-    mcp.run()
+    app.run()
